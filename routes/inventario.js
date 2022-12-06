@@ -6,7 +6,20 @@ const router = Router();
 
 router.get('/', async function(req, res) {
     try {
-        const inventarios = await Inventario.find();
+        const inventarios = await Inventario.find().populate([
+            {
+                path: 'usuario', select: 'nombre email estado'
+            },
+            {
+                path: 'marca', select: 'nombre estado'
+            },
+            {
+                path: 'tipoEquipo', select: 'nombre estado'
+            },
+            {
+                path: 'estadoEquipo', select: 'nombre estado'
+            }
+        ]);
         res.send(inventarios);
     } catch (error) {
         console.log(error);
