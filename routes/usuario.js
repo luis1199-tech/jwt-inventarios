@@ -1,8 +1,9 @@
 const { Router } = require('express');
 const { validationResult, check } = require('express-validator');
-const router = Router();
 const Usuario = require('../models/Usuario');
 const bycript = require('bcryptjs');// para incriptar la contraseña
+
+const router = Router();
 
 router.get('/', async function(req, res) {
     try {

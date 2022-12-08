@@ -17,6 +17,7 @@ app.use('/estado-equipo', require('./routes/estadoEquipo'));
 app.use('/marca', require('./routes/marca'));
 app.use('/tipo-equipo', require('./routes/tipoEquipo'));
 app.use('/inventario', require('./routes/inventario'));
+app.use('/login', require('./routes/login'));
 
 app.listen(port, () => {
     console.log(`La aplicacion se escucha en el puerto ${port}`)
