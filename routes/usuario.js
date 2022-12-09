@@ -2,10 +2,11 @@ const { Router } = require('express');
 const { validationResult, check } = require('express-validator');
 const Usuario = require('../models/Usuario');
 const bycript = require('bcryptjs');// para incriptar la contraseña
+const { validarJWT } = require( '../middleware/validar-jwt');//validar los token de los usuarios creados
 
 const router = Router();
 
-router.get('/', async function(req, res) {
+router.get('/', [ validarJWT ], async function(req, res) {
     try {
         const usuarios = await Usuario.find();
         res.send(usuarios);
@@ -20,7 +21,8 @@ router.post('/', [
         check('email', 'email.requerido').isEmail(),
         check('estado', 'estado.requerido').isIn(['Activo', 'Inactivo']),
         check('contrasena', 'contrasena.requerido').not().isEmpty(),
-        check('rol', 'rol.requerido').isIn(['Administrador', 'Docente'])
+        check('rol', 'rol.requerido').isIn(['Administrador', 'Docente']),
+        validarJWT
     ],
         
     async function(req, res) {
