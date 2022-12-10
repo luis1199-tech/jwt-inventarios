@@ -1,10 +1,12 @@
 const { Router } = require('express');
 const { validationResult, check } = require('express-validator');
 const TipoEquipo = require('../models/TipoEquipo');
+const { validarJWT} = require('../middleware/validar-jwt');
+const { validarRolAdmin } = require('../middleware/validar-rol-admin');
 
 const router = Router();
 
-router.get('/', async function(req, res) {
+router.get('/', [ validarJWT ], async function(req, res) {
     try {
         const tipos = await TipoEquipo.find();
         res.send(tipos);
@@ -18,6 +20,8 @@ router.post('/',
     [
         check('nombre', 'nombre.requerido').not().isEmpty(),
         check('estado', 'estado.requerido').isIn(['Activo', 'Inactivo']),
+        validarJWT,
+        validarRolAdmin
     ],
     async function(req, res) {
         try {

@@ -1,10 +1,13 @@
 const { Router } = require('express');
 const Inventario = require('../models/Inventario');
 const { validarInventario } = require('../helpers/validar-inventario');
+const { validarJWT } = require( '../middleware/validar-jwt');//validar los token de los usuarios creados
+const { validarRolAdmin } = require( '../middleware/validar-rol-admin');//validar si el usuario tiene rol de administrador
+
 
 const router = Router();
 
-router.get('/', async function(req, res) {
+router.get('/',  [ validarJWT ], async function(req, res) {
     try {
         const inventarios = await Inventario.find().populate([
             {
@@ -27,7 +30,14 @@ router.get('/', async function(req, res) {
     }
 });
 
-router.post('/', async function(req, res) {
+router.post('/', [
+
+    validarJWT,
+    validarRolAdmin
+
+        ], 
+
+async function(req, res) {
     try {
         const validaciones = validarInventario(req);
         if (validaciones.length > 0) {

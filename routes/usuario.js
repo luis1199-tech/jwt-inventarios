@@ -3,6 +3,7 @@ const { validationResult, check } = require('express-validator');
 const Usuario = require('../models/Usuario');
 const bycript = require('bcryptjs');// para incriptar la contraseña
 const { validarJWT } = require( '../middleware/validar-jwt');//validar los token de los usuarios creados
+const { validarRolAdmin } = require( '../middleware/validar-rol-admin');//validar si el usuario tiene rol de administrador
 
 const router = Router();
 
@@ -22,7 +23,8 @@ router.post('/', [
         check('estado', 'estado.requerido').isIn(['Activo', 'Inactivo']),
         check('contrasena', 'contrasena.requerido').not().isEmpty(),
         check('rol', 'rol.requerido').isIn(['Administrador', 'Docente']),
-        validarJWT
+        validarJWT,
+        validarRolAdmin
     ],
         
     async function(req, res) {
